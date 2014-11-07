@@ -1,0 +1,232 @@
+//	file: 
+		local Namedo "gusa2013-fcast-an_006a_v01a-forecast evaluation"
+//
+//	task:  all forecast diagnostics in one file
+//			
+
+
+//
+//	author:
+		local aut "\ sc \ 2014-04-04"
+
+// Input datasets:
+
+//		local master		 "5a1forecast.dta"	//  Master Dataset for 2013 with projected values
+		local master		 "5a2_M1forecast.dta"	//  Master Dataset for 2013 with projected values
+										
+* Opening tasks. 								
+*
+capture log close
+clear all
+
+***	***		***  Defining the directories	***		****
+
+			cd							"G:\Research\Giving USA\GUSA 2013\Forecast Project\Work\Analysis"
+			local datadirIN				"G:\Research\Giving USA\GUSA 2013\Forecast Project\Work\Datasets\Derived"
+			local logdir				"G:\Research\Giving USA\GUSA 2013\Forecast Project\Work\Analysis\Log Files"
+			log using 					"`logdir'\\`Namedo'.log", replace
+			local datadirOUT			"G:\Research\Giving USA\GUSA 2013\Forecast Project\Work\Analysis\Graph Output\WithExogVars"
+			local tabledir				"G:\Research\Giving USA\GUSA 2013\Forecast Project\Work\Analysis\Table Output"
+
+
+local datadirNamedo "`datadirOUT'\\`Namedo'"
+
+adopath + C:\Docume~1\Admini~1\Mydocu~1\ado 
+adopath ++ "G:\Research\StataAdoFiles"
+
+set more off
+
+local tag "`Namedo'.do  `aut'"
+
+* *** *** *** *** *** *** *** *** *** *** *** *** *** *** *	
+
+use  "`datadirIN'\\`master'", clear	// 5a1
+* *** *** *** *** *** *** *** *** *** *** *** *** *** *** *	
+* *** *** *** *** *** *** *** *** *** *** *** *** *** *** *	
+
+/* merge all the datasets:
+		5a1forecast.dta
+		5b1forecast.dta
+		5a2_M1forecast.dta
+		5a2_M2forecast.dta
+		5a2_M3forecast.dta
+		5a2_M4forecast.dta
+		5a2_M5forecast.dta
+		5b2_M1forecast.dta
+		5b2_M2forecast.dta
+		5b2_M3forecast.dta
+		5b2_M4forecast.dta
+*/
+
+/*merge 1:1 Year using "`datadirIN'\5b1forecast.dta"
+drop _merge
+merge 1:1 Year using "`datadirIN'\5a2_M1forecast.dta"
+drop _merge */
+merge 1:1 Year using "`datadirIN'\5a2_M2forecast.dta"
+drop _merge
+merge 1:1 Year using "`datadirIN'\5a2_M3forecast.dta"
+drop _merge
+merge 1:1 Year using "`datadirIN'\5a2_M4forecast.dta"
+drop _merge
+merge 1:1 Year using "`datadirIN'\5a2_M5forecast.dta"
+drop _merge
+merge 1:1 Year using "`datadirIN'\5b2_M1forecast.dta"
+drop _merge
+merge 1:1 Year using "`datadirIN'\5b2_M2forecast.dta"
+drop _merge
+merge 1:1 Year using "`datadirIN'\5b2_M3forecast.dta"
+drop _merge
+merge 1:1 Year using "`datadirIN'\5b2_M4forecast.dta"
+drop _merge
+merge 1:1 Year using "`datadirIN'\5b2_M5forecast.dta"
+drop _merge
+
+
+* This will be used in all the models
+clonevar TIME = Year
+clonevar Date = Year
+
+****************************************
+
+
+**************************************** Ind. M1 - Main model
+*Portmanteau test
+wntestq res1 // no evidence against white noise residuals
+
+* Actfit - MZ regression and Theil's U 
+clonevar forecast = M1_5a2Fcast
+gen actual = GRItemIndGiv
+actfit
+
+drop actual
+drop forecast
+
+**************************************** Ind. M2
+*Portmanteau test
+wntestq res2 // no evidence against white noise residuals
+
+* Actfit - MZ regression and Theil's U 
+clonevar forecast = M2_5a2Fcast
+gen actual = GRItemIndGiv
+actfit
+
+drop actual
+drop forecast
+
+**************************************** Ind. M3
+*Portmanteau test
+wntestq res3 // no evidence against white noise residuals
+
+* Actfit - MZ regression and Theil's U 
+clonevar forecast = M3_5a2Fcast
+gen actual = GRItemIndGiv
+actfit
+
+drop actual
+drop forecast
+
+**************************************** Ind. M4
+*Portmanteau test
+wntestq res4 // no evidence against white noise residuals
+
+* Actfit - MZ regression and Theil's U 
+clonevar forecast = M4_5a2Fcast
+gen actual = GRItemIndGiv
+actfit
+
+drop actual
+drop forecast
+
+**************************************** Ind. M5
+*Portmanteau test
+wntestq res5 // no evidence against white noise residuals
+
+* Actfit - MZ regression and Theil's U 
+clonevar forecast = M5_5a2Fcast
+gen actual = GRItemIndGiv
+actfit
+
+drop actual
+drop forecast
+
+****************************************
+**** Corporate giving model recreation & permutations
+****************************************
+
+**************************************** Corp. M1
+*Portmanteau test
+wntestq res6 // no evidence against white noise residuals
+
+* Actfit - MZ regression and Theil's U 
+clonevar forecast = M1_5b2Fcast
+gen actual = GRItemCorpGiv
+actfit
+
+
+drop actual
+drop forecast
+
+**************************************** Corp. M2 - Main model
+*Portmanteau test
+wntestq res7 // no evidence against white noise residuals
+
+* Actfit - MZ regression and Theil's U 
+clonevar forecast = M2_5b2Fcast
+gen actual = GRItemCorpGiv
+actfit
+
+
+drop actual
+drop forecast
+
+**************************************** Corp. M3
+*Portmanteau test
+wntestq res8 // no evidence against white noise residuals
+
+* Actfit - MZ regression and Theil's U 
+clonevar forecast = M3_5b2Fcast
+gen actual = GRItemCorpGiv
+actfit
+
+
+drop actual
+drop forecast
+
+**************************************** Corp. M4
+*Portmanteau test
+wntestq res9 // no evidence against white noise residuals
+
+* Actfit - MZ regression and Theil's U 
+clonevar forecast = M4_5b2Fcast
+gen actual = GRItemCorpGiv
+actfit
+
+
+drop actual
+drop forecast
+
+**************************************** Corp. M5
+*Portmanteau test
+wntestq res10 // no evidence against white noise residuals
+
+* Actfit - MZ regression and Theil's U 
+clonevar forecast = M5_5b2Fcast
+gen actual = GRItemCorpGiv
+actfit
+
+
+drop actual
+drop forecast
+
+
+
+
+****************************
+****************************
+
+*** save in Derived dataset folder
+save "`datadirIN'\forecasts.dta", replace
+
+
+	log close
+	set more on

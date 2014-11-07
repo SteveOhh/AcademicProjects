@@ -1,0 +1,703 @@
+---------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  G:\Research\Giving USA\GUSA 2013\Forecast Project\Work\Analysis\Log Files\
+> gusa2013-fcast-an_006a_v01a-forecast evaluation.log
+  log type:  text
+ opened on:  25 Apr 2014, 11:15:36
+
+.                         local datadirOUT                        "G:\Research\Giving U
+> SA\GUSA 2013\Forecast Project\Work\Analysis\Graph Output\WithExogVars"
+
+.                         local tabledir                          "G:\Research\Giving U
+> SA\GUSA 2013\Forecast Project\Work\Analysis\Table Output"
+
+. 
+. 
+. local datadirNamedo "`datadirOUT'\\`Namedo'"
+
+. 
+. adopath + C:\Docume~1\Admini~1\Mydocu~1\ado 
+  [1]              "G:\Research\StataAdoFiles"
+  [2]  (UPDATES)   "C:\Program Files (x86)\Stata12\ado\updates/"
+  [3]  (BASE)      "C:\Program Files (x86)\Stata12\ado\base/"
+  [4]  (SITE)      "C:\Program Files (x86)\Stata12\ado\site/"
+  [5]              "."
+  [6]  (PERSONAL)  "c:\ado\personal/"
+  [7]  (PLUS)      "c:\ado\plus/"
+  [8]  (OLDPLACE)  "c:\ado/"
+  [9]              "C:\Docume~1\Admini~1\Mydocu~1\ado"
+
+. adopath ++ "G:\Research\StataAdoFiles"
+  [1]              "G:\Research\StataAdoFiles"
+  [2]  (UPDATES)   "C:\Program Files (x86)\Stata12\ado\updates/"
+  [3]  (BASE)      "C:\Program Files (x86)\Stata12\ado\base/"
+  [4]  (SITE)      "C:\Program Files (x86)\Stata12\ado\site/"
+  [5]              "."
+  [6]  (PERSONAL)  "c:\ado\personal/"
+  [7]  (PLUS)      "c:\ado\plus/"
+  [8]  (OLDPLACE)  "c:\ado/"
+  [9]              "C:\Docume~1\Admini~1\Mydocu~1\ado"
+
+. 
+. set more off
+
+. 
+. local tag "`Namedo'.do  `aut'"
+
+. 
+. * *** *** *** *** *** *** *** *** *** *** *** *** *** *** *     
+. 
+. use  "`datadirIN'\\`master'", clear     // 5a1
+(2013 Giving USA Dataset Cleaned for Forecast Project \ Cleaned \ 2014-02-14)
+
+. * *** *** *** *** *** *** *** *** *** *** *** *** *** *** *     
+. * *** *** *** *** *** *** *** *** *** *** *** *** *** *** *     
+. 
+. /* merge all the datasets:
+>                 5a1forecast.dta
+>                 5b1forecast.dta
+>                 5a2_M1forecast.dta
+>                 5a2_M2forecast.dta
+>                 5a2_M3forecast.dta
+>                 5a2_M4forecast.dta
+>                 5a2_M5forecast.dta
+>                 5b2_M1forecast.dta
+>                 5b2_M2forecast.dta
+>                 5b2_M3forecast.dta
+>                 5b2_M4forecast.dta
+> */
+. 
+. /*merge 1:1 Year using "`datadirIN'\5b1forecast.dta"
+> drop _merge
+> merge 1:1 Year using "`datadirIN'\5a2_M1forecast.dta"
+> drop _merge */
+. merge 1:1 Year using "`datadirIN'\5a2_M2forecast.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                                68  (_merge==3)
+    -----------------------------------------
+
+. drop _merge
+
+. merge 1:1 Year using "`datadirIN'\5a2_M3forecast.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                                68  (_merge==3)
+    -----------------------------------------
+
+. drop _merge
+
+. merge 1:1 Year using "`datadirIN'\5a2_M4forecast.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                                68  (_merge==3)
+    -----------------------------------------
+
+. drop _merge
+
+. merge 1:1 Year using "`datadirIN'\5a2_M5forecast.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                                68  (_merge==3)
+    -----------------------------------------
+
+. drop _merge
+
+. merge 1:1 Year using "`datadirIN'\5b2_M1forecast.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                                68  (_merge==3)
+    -----------------------------------------
+
+. drop _merge
+
+. merge 1:1 Year using "`datadirIN'\5b2_M2forecast.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                                68  (_merge==3)
+    -----------------------------------------
+
+. drop _merge
+
+. merge 1:1 Year using "`datadirIN'\5b2_M3forecast.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                                68  (_merge==3)
+    -----------------------------------------
+
+. drop _merge
+
+. merge 1:1 Year using "`datadirIN'\5b2_M4forecast.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                                68  (_merge==3)
+    -----------------------------------------
+
+. drop _merge
+
+. merge 1:1 Year using "`datadirIN'\5b2_M5forecast.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                                68  (_merge==3)
+    -----------------------------------------
+
+. drop _merge
+
+. 
+. 
+. * This will be used in all the models
+. clonevar TIME = Year
+
+. clonevar Date = Year
+
+. 
+. ****************************************
+. 
+. 
+. **************************************** Ind. M1 - Main model
+. *Portmanteau test
+. wntestq res1 // no evidence against white noise residuals
+
+Portmanteau test for white noise
+---------------------------------------
+ Portmanteau (Q) statistic =     0.8459
+ Prob > chi2(3)            =     0.8385
+
+. 
+. * Actfit - MZ regression and Theil's U 
+. clonevar forecast = M1_5a2Fcast
+(7 missing values generated)
+
+. gen actual = GRItemIndGiv
+(12 missing values generated)
+
+. actfit
+MEASURES OF FORECAST PERFORMANCE
+Number of Obs     = 55
+Corr. Cof.        = .93880156
+MSE               = .00041915
+RMSE              = .02047324
+MAPE              = .30829066
+MAE               = .00758553
+Bias              = .00475695
+Theil U (Level)   = .33480087
+Theil U (Percent) = .4114111
+
+THEIL DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                    =.05398638
+     Fraction of MSE due to different Variation     =.16782592
+     Fraction of MSE due to difference Covariation  =.7781877
+
+THEIL ALTERNATIVE DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                          =.05398638
+     Fraction of MSE due to Difference of Beta from one   =.07722319
+     Fraction of MSE due to Residual Variance             =.86879042
+
+Mincer-Zarnowitz Regression
+                            Constant = -.00731606
+                            Slope    = 1.0761165
+two-tailed p-value for slope=1.00    = .08122251
+
+. 
+. drop actual
+
+. drop forecast
+
+. 
+. **************************************** Ind. M2
+. *Portmanteau test
+. wntestq res2 // no evidence against white noise residuals
+
+Portmanteau test for white noise
+---------------------------------------
+ Portmanteau (Q) statistic =     0.6941
+ Prob > chi2(3)            =     0.8746
+
+. 
+. * Actfit - MZ regression and Theil's U 
+. clonevar forecast = M2_5a2Fcast
+(7 missing values generated)
+
+. gen actual = GRItemIndGiv
+(12 missing values generated)
+
+. actfit
+MEASURES OF FORECAST PERFORMANCE
+Number of Obs     = 55
+Corr. Cof.        = .92798804
+MSE               = .00049612
+RMSE              = .02227371
+MAPE              = .32136445
+MAE               = .00822858
+Bias              = .00542288
+Theil U (Level)   = .36424416
+Theil U (Percent) = .53651899
+
+THEIL DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                    =.05927548
+     Fraction of MSE due to different Variation     =.18744076
+     Fraction of MSE due to difference Covariation  =.75328377
+
+THEIL ALTERNATIVE DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                          =.05927548
+     Fraction of MSE due to Difference of Beta from one   =.08183318
+     Fraction of MSE due to Residual Variance             =.85889134
+
+Mincer-Zarnowitz Regression
+                            Constant = -.00855513
+                            Slope    = 1.0912404
+two-tailed p-value for slope=1.00    = .06595588
+
+. 
+. drop actual
+
+. drop forecast
+
+. 
+. **************************************** Ind. M3
+. *Portmanteau test
+. wntestq res3 // no evidence against white noise residuals
+
+Portmanteau test for white noise
+---------------------------------------
+ Portmanteau (Q) statistic =     0.9730
+ Prob > chi2(3)            =     0.8078
+
+. 
+. * Actfit - MZ regression and Theil's U 
+. clonevar forecast = M3_5a2Fcast
+(7 missing values generated)
+
+. gen actual = GRItemIndGiv
+(12 missing values generated)
+
+. actfit
+MEASURES OF FORECAST PERFORMANCE
+Number of Obs     = 55
+Corr. Cof.        = .94626227
+MSE               = .00037227
+RMSE              = .01929443
+MAPE              = .28216075
+MAE               = .00705296
+Bias              = .00449139
+Theil U (Level)   = .31552364
+Theil U (Percent) = .39565421
+
+THEIL DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                    =.05418744
+     Fraction of MSE due to different Variation     =.17153472
+     Fraction of MSE due to difference Covariation  =.77427784
+
+THEIL ALTERNATIVE DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                          =.05418744
+     Fraction of MSE due to Difference of Beta from one   =.08356631
+     Fraction of MSE due to Residual Variance             =.86224625
+
+Mincer-Zarnowitz Regression
+                            Constant = -.00710016
+                            Slope    = 1.0779951
+two-tailed p-value for slope=1.00    = .06286875
+
+. 
+. drop actual
+
+. drop forecast
+
+. 
+. **************************************** Ind. M4
+. *Portmanteau test
+. wntestq res4 // no evidence against white noise residuals
+
+Portmanteau test for white noise
+---------------------------------------
+ Portmanteau (Q) statistic =     0.8375
+ Prob > chi2(3)            =     0.8405
+
+. 
+. * Actfit - MZ regression and Theil's U 
+. clonevar forecast = M4_5a2Fcast
+(7 missing values generated)
+
+. gen actual = GRItemIndGiv
+(12 missing values generated)
+
+. actfit
+MEASURES OF FORECAST PERFORMANCE
+Number of Obs     = 55
+Corr. Cof.        = .9390547
+MSE               = .00041764
+RMSE              = .02043619
+MAPE              = .30723948
+MAE               = .00757205
+Bias              = .00474357
+Theil U (Level)   = .33419499
+Theil U (Percent) = .41108196
+
+THEIL DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                    =.05387796
+     Fraction of MSE due to different Variation     =.16842209
+     Fraction of MSE due to difference Covariation  =.77769996
+
+THEIL ALTERNATIVE DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                          =.05387796
+     Fraction of MSE due to Difference of Beta from one   =.07767196
+     Fraction of MSE due to Residual Variance             =.86845008
+
+Mincer-Zarnowitz Regression
+                            Constant = -.00731536
+                            Slope    = 1.0765035
+two-tailed p-value for slope=1.00    = .07978632
+
+. 
+. drop actual
+
+. drop forecast
+
+. 
+. **************************************** Ind. M5
+. *Portmanteau test
+. wntestq res5 // no evidence against white noise residuals
+
+Portmanteau test for white noise
+---------------------------------------
+ Portmanteau (Q) statistic =     0.8261
+ Prob > chi2(3)            =     0.8432
+
+. 
+. * Actfit - MZ regression and Theil's U 
+. clonevar forecast = M5_5a2Fcast
+(7 missing values generated)
+
+. gen actual = GRItemIndGiv
+(12 missing values generated)
+
+. actfit
+MEASURES OF FORECAST PERFORMANCE
+Number of Obs     = 55
+Corr. Cof.        = .94222383
+MSE               = .00039193
+RMSE              = .01979719
+MAPE              = .28851684
+MAE               = .00754472
+Bias              = .00396038
+Theil U (Level)   = .32374544
+Theil U (Percent) = .3725004
+
+THEIL DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                    =.04001901
+     Fraction of MSE due to different Variation     =.1722332
+     Fraction of MSE due to difference Covariation  =.78774779
+
+THEIL ALTERNATIVE DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                          =.04001901
+     Fraction of MSE due to Difference of Beta from one   =.08125158
+     Fraction of MSE due to Residual Variance             =.87872941
+
+Mincer-Zarnowitz Regression
+                            Constant = -.00649882
+                            Slope    = 1.0768428
+two-tailed p-value for slope=1.00    = .07307089
+
+. 
+. drop actual
+
+. drop forecast
+
+. 
+. ****************************************
+. **** Corporate giving model recreation & permutations
+. ****************************************
+. 
+. **************************************** Corp. M1
+. *Portmanteau test
+. wntestq res6 // no evidence against white noise residuals
+
+Portmanteau test for white noise
+---------------------------------------
+ Portmanteau (Q) statistic =     1.3853
+ Prob > chi2(3)            =     0.7090
+
+. 
+. * Actfit - MZ regression and Theil's U 
+. clonevar forecast = M1_5b2Fcast
+(7 missing values generated)
+
+. gen actual = GRItemCorpGiv
+(12 missing values generated)
+
+. actfit
+MEASURES OF FORECAST PERFORMANCE
+Number of Obs     = 55
+Corr. Cof.        = .93490371
+MSE               = .0015122
+RMSE              = .03888708
+MAPE              = .24720077
+MAE               = .01544422
+Bias              = .00124078
+Theil U (Level)   = .27038026
+Theil U (Percent) = .06093089
+
+THEIL DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                    =.00101807
+     Fraction of MSE due to different Variation     =.11505838
+     Fraction of MSE due to difference Covariation  =.88392355
+
+THEIL ALTERNATIVE DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                          =.00101807
+     Fraction of MSE due to Difference of Beta from one   =.09737207
+     Fraction of MSE due to Residual Variance             =.90160986
+
+Mincer-Zarnowitz Regression
+                            Constant = -.00056574
+                            Slope    = .98100437
+two-tailed p-value for slope=1.00    = .35463995
+
+. 
+. 
+. drop actual
+
+. drop forecast
+
+. 
+. **************************************** Corp. M2 - Main model
+. *Portmanteau test
+. wntestq res7 // no evidence against white noise residuals
+
+Portmanteau test for white noise
+---------------------------------------
+ Portmanteau (Q) statistic =     1.3442
+ Prob > chi2(3)            =     0.7187
+
+. 
+. * Actfit - MZ regression and Theil's U 
+. clonevar forecast = M2_5b2Fcast
+(7 missing values generated)
+
+. gen actual = GRItemCorpGiv
+(12 missing values generated)
+
+. actfit
+MEASURES OF FORECAST PERFORMANCE
+Number of Obs     = 55
+Corr. Cof.        = .9355228
+MSE               = .00149806
+RMSE              = .03870476
+MAPE              = .24553903
+MAE               = .0153956
+Bias              = .00121216
+Theil U (Level)   = .26911263
+Theil U (Percent) = .06074001
+
+THEIL DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                    =.00098083
+     Fraction of MSE due to different Variation     =.1151506
+     Fraction of MSE due to difference Covariation  =.88386857
+
+THEIL ALTERNATIVE DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                          =.00098083
+     Fraction of MSE due to Difference of Beta from one   =.09726257
+     Fraction of MSE due to Residual Variance             =.9017566
+
+Mincer-Zarnowitz Regression
+                            Constant = -.00055721
+                            Slope    = .98155884
+two-tailed p-value for slope=1.00    = .35805475
+
+. 
+. 
+. drop actual
+
+. drop forecast
+
+. 
+. **************************************** Corp. M3
+. *Portmanteau test
+. wntestq res8 // no evidence against white noise residuals
+
+Portmanteau test for white noise
+---------------------------------------
+ Portmanteau (Q) statistic =     1.5239
+ Prob > chi2(3)            =     0.6768
+
+. 
+. * Actfit - MZ regression and Theil's U 
+. clonevar forecast = M3_5b2Fcast
+(7 missing values generated)
+
+. gen actual = GRItemCorpGiv
+(12 missing values generated)
+
+. actfit
+MEASURES OF FORECAST PERFORMANCE
+Number of Obs     = 55
+Corr. Cof.        = .93454164
+MSE               = .00151935
+RMSE              = .03897881
+MAPE              = .24752054
+MAE               = .01532029
+Bias              = .00131215
+Theil U (Level)   = .27101808
+Theil U (Percent) = .06108558
+
+THEIL DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                    =.0011332
+     Fraction of MSE due to different Variation     =.11749207
+     Fraction of MSE due to difference Covariation  =.88137473
+
+THEIL ALTERNATIVE DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                          =.0011332
+     Fraction of MSE due to Difference of Beta from one   =.0966734
+     Fraction of MSE due to Residual Variance             =.9021934
+
+Mincer-Zarnowitz Regression
+                            Constant = -.00073522
+                            Slope    = .98392898
+two-tailed p-value for slope=1.00    = .37691903
+
+. 
+. 
+. drop actual
+
+. drop forecast
+
+. 
+. **************************************** Corp. M4
+. *Portmanteau test
+. wntestq res9 // no evidence against white noise residuals
+
+Portmanteau test for white noise
+---------------------------------------
+ Portmanteau (Q) statistic =     1.5851
+ Prob > chi2(3)            =     0.6628
+
+. 
+. * Actfit - MZ regression and Theil's U 
+. clonevar forecast = M4_5b2Fcast
+(7 missing values generated)
+
+. gen actual = GRItemCorpGiv
+(12 missing values generated)
+
+. actfit
+MEASURES OF FORECAST PERFORMANCE
+Number of Obs     = 55
+Corr. Cof.        = .93585734
+MSE               = .00148916
+RMSE              = .03858963
+MAPE              = .24189707
+MAE               = .015182
+Bias              = .00133137
+Theil U (Level)   = .26831209
+Theil U (Percent) = .06036531
+
+THEIL DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                    =.0011903
+     Fraction of MSE due to different Variation     =.11873051
+     Fraction of MSE due to difference Covariation  =.88007919
+
+THEIL ALTERNATIVE DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                          =.0011903
+     Fraction of MSE due to Difference of Beta from one   =.09621485
+     Fraction of MSE due to Residual Variance             =.90259485
+
+Mincer-Zarnowitz Regression
+                            Constant = -.00083941
+                            Slope    = .9864133
+two-tailed p-value for slope=1.00    = .39455833
+
+. 
+. 
+. drop actual
+
+. drop forecast
+
+. 
+. **************************************** Corp. M5
+. *Portmanteau test
+. wntestq res10 // no evidence against white noise residuals
+
+Portmanteau test for white noise
+---------------------------------------
+ Portmanteau (Q) statistic =     1.9142
+ Prob > chi2(3)            =     0.5904
+
+. 
+. * Actfit - MZ regression and Theil's U 
+. clonevar forecast = M5_5b2Fcast
+(7 missing values generated)
+
+. gen actual = GRItemCorpGiv
+(12 missing values generated)
+
+. actfit
+MEASURES OF FORECAST PERFORMANCE
+Number of Obs     = 55
+Corr. Cof.        = .93596365
+MSE               = .00148662
+RMSE              = .03855665
+MAPE              = .23772001
+MAE               = .0149932
+Bias              = .00155994
+Theil U (Level)   = .2680828
+Theil U (Percent) = .06049683
+
+THEIL DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                    =.00163689
+     Fraction of MSE due to different Variation     =.12112199
+     Fraction of MSE due to difference Covariation  =.87724112
+
+THEIL ALTERNATIVE DECOMPOSITION OF MSE
+     Fraction of MSE due to Bias                          =.00163689
+     Fraction of MSE due to Difference of Beta from one   =.09567261
+     Fraction of MSE due to Residual Variance             =.9026905
+
+Mincer-Zarnowitz Regression
+                            Constant = -.00116866
+                            Slope    = .98952165
+two-tailed p-value for slope=1.00    = .41845872
+
+. 
+. 
+. drop actual
+
+. drop forecast
+
+. 
+. 
+. 
+. 
+. ****************************
+. ****************************
+. 
+. *** save in Derived dataset folder
+. save "`datadirIN'\forecasts.dta", replace
+file G:\Research\Giving USA\GUSA 2013\Forecast Project\Work\Datasets\Derived\forecasts.
+> dta saved
+
+. 
+. 
+.         log close
+      name:  <unnamed>
+       log:  G:\Research\Giving USA\GUSA 2013\Forecast Project\Work\Analysis\Log Files\
+> gusa2013-fcast-an_006a_v01a-forecast evaluation.log
+  log type:  text
+ closed on:  25 Apr 2014, 11:15:42
+---------------------------------------------------------------------------------------
