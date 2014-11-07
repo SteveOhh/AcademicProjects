@@ -1,4 +1,4 @@
-# Highlights from 2014
+# AcademicProjects: Highlights from 2014
 
 Here are my two biggest projects from my economics program, plus the final output of a long-term research project at the School of Philanthropy. 
 
